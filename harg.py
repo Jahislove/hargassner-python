@@ -30,7 +30,7 @@ PORT = 23
 MSGBUFSIZE=1024
 
 DB_SERVER ='192.168.0.111'  # MySQL : IP server (localhost if mySQL is on the same machine)
-DB_BASE='hargassner'        # MySQL : database name
+DB_BASE='Hargassner'        # MySQL : database name
 DB_USER='hargassner'        # MySQL : user  
 DB_PWD='*******'            # MySQL : password 
 
@@ -102,8 +102,18 @@ while True:
             if i == INSERT_GROUPED:
                 for x in range(INSERT_GROUPED):
                     tableau = tuple(tableau)  # crée un tuple de tuple
-                    query_db("""INSERT INTO nanoPK  VALUES (null,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')
-                            """ % tableau[x] )
+                    query_db("""INSERT INTO nanoPK  VALUES (null,'%s','%s','%s','%s','%s','%s','%s','%s',
+                    '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
+                    '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
+                    '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
+                    '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
+                    '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
+                    '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
+                    '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
+                    '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
+                    '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
+                    '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')
+                    """ % tableau[x] )
                 i = 0
                 tableau = []
 
@@ -117,5 +127,4 @@ while True:
         print "index error continue"
         continue
         
-db.close()
 s.close()   
