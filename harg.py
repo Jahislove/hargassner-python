@@ -69,7 +69,6 @@ def query_db(sql):
         log = time.strftime('%Y-%m-%d %H:%M:%S') + " ERR : MySQL is down :" + MySQLdb.Error
         logfile.write(log)
         logfile.close
-        db.close()
     
 #----------------------------------------------------------#
 #             code                                         #
@@ -113,7 +112,7 @@ while True:
                     '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
                     '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
                     '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')
-                    """ % tableau[x] )
+                    """ % tableau[x] ) # null correspond a id
                 i = 0
                 tableau = []
 
@@ -123,8 +122,7 @@ while True:
 			logfile.write("----\n")
 			logfile.close
 
-    except IndexError:
-        print "index error continue"
+    except :
         continue
         
 s.close()   
