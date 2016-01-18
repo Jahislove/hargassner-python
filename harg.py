@@ -30,10 +30,9 @@ IP_CHAUDIERE = '192.168.0.198'
 PORT = 23    
 MSGBUFSIZE=1024
 
-DB_SERVER ='192.168.0.111'  # MySQL : IP server (localhost if mySQL is on the same machine)
-DB_BASE='Hargassner'        # MySQL : database name
-DB_USER='hargassner'        # MySQL : user  
-DB_PWD='*******'            # MySQL : password 
+DB_SERVER = '192.168.0.111'   # MySQL : IP server (localhost if mySQL is on the same machine)
+DB_BASE = 'Hargassner'        # MySQL : database name
+DB_USER = 'hargassner'        # MySQL : user  
 
 INSERT_GROUPED = 2         # regroupe n reception avant d'ecrire en base :INSERT_GROUPED x FREQUENCY = temps en sec
 FREQUENCY = 5               # Periodicité (reduit le volume de data mais reduit la précision)
