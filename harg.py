@@ -22,6 +22,7 @@ import time
 import datetime
 import MySQLdb   # MySQLdb must be installed by yourself
 import sys
+import logging
 #import sqlite3
 
 PATH_HARG = "/home/pi/hargassner/" #path to this script
@@ -42,15 +43,28 @@ FREQUENCY = 5               # Periodicité (reduit le volume de data mais reduit
                             # une frequence trop élevée entraine de gros volume en BDD et surtout des grosses 
                             # lenteurs pour afficher les graphiques
 #----------------------------------------------------------#
+#        definition des logs                               #
+#----------------------------------------------------------#
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger('log')
+logger.setLevel(logging.DEBUG)
+
+handler_debug = logging.FileHandler(PATH_HARG + "error.log", mode="a", encoding="utf-8")
+handler_debug.setFormatter(formatter)
+handler_debug.setLevel(logging.DEBUG)
+logger.addHandler(handler_debug)
+
+#----------------------------------------------------------#
 #        socket for Connection to Hargassner               #
 #----------------------------------------------------------#
 while True:
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)         
         s.connect((IP_CHAUDIERE, PORT))
+        logger.info("creation du socket telnet")
         break
     except:
-        print "connexion impossible"
+        logger.critical("connexion a la chaudiere impossible")
         time.sleep(0.5)
         
 #----------------------------------------------------------#
@@ -64,11 +78,14 @@ def query_db(sql):
         cursor.execute(sql)
         db.commit()
         db.close()
+        logger.info("ecriture en bdd OK")
+        
     except MySQLdb.Error:
-        logfile = open(PATH_HARG + "hargassner.log", "a")
-        log = time.strftime('%Y-%m-%d %H:%M:%S') + " ERR : MySQL is down :" + MySQLdb.Error
-        logfile.write(log)
-        logfile.close
+        logger.error("MySQL is down : %s", MySQLdb.Error)
+        # logfile = open(PATH_HARG + "hargassner.log", "a")
+        # log = time.strftime('%Y-%m-%d %H:%M:%S') + " ERR : MySQL is down :" + MySQLdb.Error
+        # logfile.write(log)
+        # logfile.close
     
 #----------------------------------------------------------#
 #             code                                         #
@@ -81,6 +98,7 @@ while True:
     try:
         buffer = s.recv(MSGBUFSIZE) # waiting a packet (waiting as long as s.recv is empty), 0x40
         datebuff = time.strftime('%Y-%m-%d %H:%M:%S') #formating date for mySQL
+        logger.info('buffer est OK')
     except KeyboardInterrupt:
         break
     try:
@@ -99,8 +117,8 @@ while True:
             liste = tuple(liste)    # transforme la liste en tuple (necessaire pour le INSERT)
             tableau.append(liste)   # cumule les tuples dans un tableau
             if i == INSERT_GROUPED:
+                tableau = tuple(tableau)  # crée un tuple de tuple
                 for x in range(INSERT_GROUPED):
-                    tableau = tuple(tableau)  # crée un tuple de tuple
                     query_db("""INSERT INTO nanoPK  VALUES (null,'%s','%s','%s','%s','%s','%s','%s','%s',
                     '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
                     '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
@@ -113,16 +131,20 @@ while True:
                     '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',
                     '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')
                     """ % tableau[x] ) # null correspond a id
+                logger.info('write DB : %s', tableau[0][0])
                 i = 0
                 tableau = []
 
         else:
-			logfile = open(PATH_HARG + "trace.log", "a")
-			logfile.write(buffer)
-			logfile.write("----\n")
-			logfile.close
+            logger.debug(buffer)
+			# logfile = open(PATH_HARG + "buffer.log", "a")
+			# logfile.write(datebuff)
+			# logfile.write(buffer)
+			# logfile.write("----\n")
+			# logfile.close
 
     except :
+        logger.error('le if pm est KO')
         continue
         
 s.close()   
