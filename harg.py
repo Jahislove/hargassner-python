@@ -33,9 +33,10 @@ MSGBUFSIZE=1024
 DB_SERVER = '192.168.0.111'   # MySQL : IP server (localhost if mySQL is on the same machine)
 DB_BASE = 'Hargassner'        # MySQL : database name
 DB_USER = 'hargassner'        # MySQL : user  
+DB_PWD = '*******'            # MySQL : password 
 
-INSERT_GROUPED = 2         # regroupe n reception avant d'ecrire en base :INSERT_GROUPED x FREQUENCY = temps en sec
-FREQUENCY = 5               # Periodicité (reduit le volume de data mais reduit la précision)
+INSERT_GROUPED = 3         # regroupe n reception avant d'ecrire en base :INSERT_GROUPED x FREQUENCY = temps en sec
+FREQUENCY = 10              # Periodicité (reduit le volume de data mais reduit la précision)
                             # (1 = toutes)     1 mesure chaque seconde
                             # (5)              1 mesure toutes les 5 secondes
                             # ...
@@ -109,12 +110,12 @@ while True:
             frequencyCount = 1
 
             # insert optimisé avec boucle permettant de grouper les données avant d'ecrire en base
-            liste=buffer.split()    # transforme la string du buffer en liste 
-            liste[0] = datebuff     # remplace la valeur "pm" par la date
-            liste = liste [0:174]   # selectionne les valeurs voulues, voir channel.txt
+            buff_liste=buffer.split()    # transforme la string du buffer en liste 
+            buff_liste[0] = datebuff     # remplace la valeur "pm" par la date
+            list_liste = buff_liste [0:174]   # selectionne les valeurs voulues, voir channel.txt, doit correspondre au nombre de %s
+            tupl_liste = tuple(list_liste)    # transforme la liste en tuple (necessaire pour le INSERT)
+            tableau.append(tupl_liste)   # cumule les tuples dans un tableau
             i = i + 1
-            liste = tuple(liste)    # transforme la liste en tuple (necessaire pour le INSERT)
-            tableau.append(liste)   # cumule les tuples dans un tableau
             if i == INSERT_GROUPED:
                 tableau = tuple(tableau)  # crée un tuple de tuple
                 for x in range(INSERT_GROUPED):
