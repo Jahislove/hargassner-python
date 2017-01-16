@@ -37,7 +37,6 @@ from threading import Thread
 DB_SERVER = '192.168.0.111'   # MySQL : IP server (localhost si mySQL est sur la meme machine)
 DB_BASE = 'Hargassner'        # MySQL : database name
 DB_USER = 'hargassner'        # MySQL : user  
-DB_PWD = '******'            # MySQL : password 
 IP_CHAUDIERE = '192.168.0.198'
 MODEL_CHAUD = 'nano'          # nano (v1.0, nano uniquement disponible),  HSV et classic : future version
 PATH_HARG = "/home/pi/hargassner/" #path to this script
@@ -418,13 +417,14 @@ i=0
 tableau = []
 #------preparation requete----------
 list_champ = ",'%s'" * nbre_param
-requete = "INSERT INTO data  VALUES (null" + list_champ + ")"
+requete = "INSERT INTO data  VALUES (null" + list_champ + ")" # null correspond au champ id
  
 while True:
     try:
         if bufferOK[0:2] == "pm":
             datebuff = time.strftime('%Y-%m-%d %H:%M:%S') #formating date for mySQL
             buff_liste=bufferOK.split()    # transforme la string du buffer en liste 
+            logger.debug(buff_liste)
             buff_liste[0] = datebuff       # remplace la valeur "pm" par la date
             list_liste = buff_liste [0:nbre_param]# selectionne les valeurs voulues, la valeur (nbre_param)doit correspondre au nombre de %s ci dessous
             tupl_liste = tuple(list_liste) # transforme la liste en tuple (necessaire pour le INSERT)
@@ -434,7 +434,7 @@ while True:
                 if i == INSERT_GROUPED:
                     tableau = tuple(tableau)  # crée un tuple de tuple
                     for x in range(INSERT_GROUPED):
-                        query_db( requete % tableau[x] ) # null correspond au champ id
+                        query_db( requete % tableau[x] ) 
                     
                     logger.debug('write DB : %s', tableau[0][0])
                     i = 0
@@ -443,7 +443,7 @@ while True:
             except:
                 logger.error('insert KO')
         else:
-            logger.debug(buffer2)
+            logger.debug(bufferOK)
 
     except :
         logger.error('le if pm est KO, buffer non defini')
