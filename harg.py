@@ -37,6 +37,7 @@ from threading import Thread
 DB_SERVER = '192.168.0.111'   # MySQL : IP server (localhost si mySQL est sur la meme machine)
 DB_BASE = 'Hargassner'        # MySQL : database name
 DB_USER = 'hargassner'        # MySQL : user  
+DB_PWD = '*******'            # MySQL : password 
 IP_CHAUDIERE = '192.168.0.198'
 MODEL_CHAUD = 'nano'          # nano (v1.0, nano uniquement disponible),  HSV et classic : future version
 PATH_HARG = "/home/pi/hargassner/" #path to this script
