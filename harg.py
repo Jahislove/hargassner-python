@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # auteur : Jahislove
-# version 1.0
+# version 1.1
 # python version 2.7
 
 # ce script tourne sur un Rasberry pi
@@ -37,7 +37,7 @@ from threading import Thread
 DB_SERVER = '192.168.0.111'   # MySQL : IP server (localhost si mySQL est sur la meme machine)
 DB_BASE = 'Hargassner'        # MySQL : database name
 DB_USER = 'hargassner'        # MySQL : user  
-DB_PWD = '*******'            # MySQL : password 
+DB_PWD = 'password'           # MySQL : password 
 IP_CHAUDIERE = '192.168.0.198'
 MODEL_CHAUD = 'nano'          # nano (v1.0, nano uniquement disponible),  HSV et classic : future version
 PATH_HARG = "/home/pi/hargassner/" #path to this script
@@ -350,6 +350,29 @@ else:
         except MySQLdb.Error:
             logger.error("MySQL is down : %s", MySQLdb.Error)
     
+#----------------------------------------------------------#
+#             initialisation table consommation            #
+#             au 1er lancement du script
+#             si la table est vide on rempli une ligne a vide
+#----------------------------------------------------------#
+try:
+    db = MySQLdb.connect(DB_SERVER, DB_USER, DB_PWD, DB_BASE)
+    cursor = db.cursor()
+
+    try:
+        cursor.execute("""SELECT COUNT(dateB) FROM consommation """)
+        compt = cursor.fetchone ()
+        if compt[0] == 0:
+            dateH =  date.today() + timedelta(days=-1)
+            cursor.execute("""INSERT INTO consommation (dateB, conso, Tmoy) VALUES ('%s','%s','%s')""" % (dateH,'0','0'))
+    except:
+        logger.error('lecture/ecriture table consommation impossible')
+
+    db.commit()
+    db.close()
+except:
+    logger.error('Erreur initialisation table consommation')
+
 #----------------------------------------------------------#
 #             declaration threads                          #
 #----------------------------------------------------------#
