@@ -1,0 +1,7 @@
+le script harg.py permet d'ecouter le telnet de la chaudiere et de remplir une base Mysql ou MariaDB
+
+la base de données contient 2 tables , vous pouvez utiliser les 2 requetes SQL pour les creer :
+create_table_consommation.sql
+create_table_data-14g.sql
+
+le fichier harg.skeleton permet de transformer le script en service sous Raspbian wheezy ( ne fonctionne pas sous jessie)

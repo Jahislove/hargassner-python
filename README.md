@@ -1,11 +1,11 @@
-ce script tourne sur un Rasberry pi.
+﻿ce script tourne sur un Rasberry pi.
 Il ecoute une chaudiere a granulés Hargassner NanoPK sur son port telnet
 et ecrit les valeurs dans une BDD MySQL ou MariaDB sur un NAS Synology.
 
-fonctionne avec les chaudieres nanoPK, classic and HSV  equipées de touchtronic + passerelle internet.
-il est possible que ca fontionne sans passerelle (a tester).
+fonctionne avec les chaudieres nanoPK, classic and HSV  equipées de touchtronic .
+la passerelle internet n'est pas obligatoire
 
-pour lancer ce script en tant que service voir ici :
+pour lancer ce script en tant que service voir ici (raspbian wheezy):
 https://jahislove314.wordpress.com/2014/08/04/transformer-un-script-python-en-service-daemon/
 
 -----------------------------------------------------------------------------------------------------

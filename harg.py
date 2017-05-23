@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # auteur : Jahislove
-# version 1.1
+# version 1.2
 # python version 2.7
 
 # ce script tourne sur un Rasberry pi
@@ -39,8 +39,8 @@ DB_BASE = 'Hargassner'        # MySQL : database name
 DB_USER = 'hargassner'        # MySQL : user  
 DB_PWD = 'password'           # MySQL : password 
 IP_CHAUDIERE = '192.168.0.198'
-MODEL_CHAUD = 'nano'          # nano (v1.0, nano uniquement disponible),  HSV et classic : future version
-PATH_HARG = "/home/pi/hargassner/" #path to this script
+FIRMWARE_CHAUD = '14g'        # firmware de la chaudiere
+PATH_HARG = "/home/pi/hargassner/" #chemin ou se trouve ce script
 
 MODE_BACKUP = True          # True si SQlite3 est installé , sinon False  
 INSERT_GROUPED = 1          # regroupe n reception avant d'ecrire en base :INSERT_GROUPED x FREQUENCY = temps en sec
@@ -49,21 +49,24 @@ FREQUENCY = 60              # Periodicité (reduit le volume de data mais reduit
                             # (5)              1 mesure toutes les 5 secondes
                             # ...
                             # une valeur trop faible entraine de gros volume en BDD et surtout des grosses 
-                            # lenteurs pour afficher les graphiques : defaut 60sec , eviter de descendre sous les 10 sec
+                            # lenteurs pour afficher les graphiques : defaut 60sec , evitez de descendre sous les 10 sec
 # ne pas modifier ci dessous
 MSGBUFSIZE=600
 PORT = 23    
 backup_row = 0
 backup_mode = 0
 
-if MODEL_CHAUD == 'nano':
+if FIRMWARE_CHAUD == '14d':
     nbre_param = 174
-# elif MODEL_CHAUD == 'HSV':
-    # nbre_param = 174
-# elif MODEL_CHAUD == 'classic':
-    # nbre_param = 174
+elif FIRMWARE_CHAUD == '14e':
+    nbre_param = 174
+elif FIRMWARE_CHAUD == '14f':
+    nbre_param = 174
+elif FIRMWARE_CHAUD == '14g':
+    nbre_param = 190
 else:
     nbre_param = 174
+   
 #----------------------------------------------------------#
 #        definition des logs                               #
 #----------------------------------------------------------#
@@ -71,7 +74,7 @@ formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger('log')
 logger.setLevel(logging.INFO) # choisir le niveau de log : DEBUG, INFO, ERROR...
 
-handler_debug = logging.FileHandler(PATH_HARG + "error.log", mode="a", encoding="utf-8")
+handler_debug = logging.FileHandler(PATH_HARG + "trace.log", mode="a", encoding="utf-8")
 handler_debug.setFormatter(formatter)
 handler_debug.setLevel(logging.DEBUG)
 logger.addHandler(handler_debug)
@@ -319,14 +322,30 @@ if MODE_BACKUP == True:
                 `c162` DECIMAL(7,2) NOT NULL,
                 `c163` DECIMAL(7,2) NOT NULL,
                 `c164` DECIMAL(7,2) NOT NULL,
-                `c165` CHAR(5) NOT NULL,
+                `c165` DECIMAL(7,2) NOT NULL,
                 `c166` DECIMAL(7,2) NOT NULL,
                 `c167` DECIMAL(7,2) NOT NULL,
                 `c168` DECIMAL(7,2) NOT NULL,
                 `c169` DECIMAL(7,2) NOT NULL,
                 `c170` DECIMAL(7,2) NOT NULL,
                 `c171` DECIMAL(7,2) NOT NULL,
-                `c172` DECIMAL(7,2) NOT NULL
+                `c172` DECIMAL(7,2) NOT NULL,
+                `c173` DECIMAL(7,2) NOT NULL,
+                `c174` DECIMAL(7,2) NOT NULL,
+                `c175` DECIMAL(7,2) NOT NULL,
+                `c176` DECIMAL(7,2) NOT NULL,
+                `c177` DECIMAL(7,2) NOT NULL,
+                `c178` DECIMAL(7,2) NOT NULL,
+                `c179` DECIMAL(7,2) NOT NULL,
+                `c180` DECIMAL(7,2) NOT NULL,
+                `c181` DECIMAL(7,2) NOT NULL,
+                `c182` CHAR(5) NOT NULL,
+                `c183` DECIMAL(7,2) NOT NULL,
+                `c184` DECIMAL(7,2) NOT NULL,
+                `c185` DECIMAL(7,2) NOT NULL,
+                `c186` DECIMAL(7,2) NOT NULL,
+                `c187` DECIMAL(7,2) NOT NULL,
+                `c188` DECIMAL(7,2) NOT NULL
                 ) ;"""
 
                 cursor_bck.execute(create_data)
